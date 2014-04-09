@@ -1,0 +1,789 @@
+\documentclass[12pt, a4paper]{article}
+
+ 
+%%% lietuvybes (sugadina fontus)
+%\usepackage[utf8x]{inputenc}
+%\usepackage[L7x]{fontenc}
+%\usepackage[lithuanian]{babel}
+
+% isjungia triukus, kuriu nereikia
+\usepackage{microtype}  
+\DisableLigatures[f]{encoding = *, family = * }
+
+% full page
+\usepackage[cm]{fullpage}
+
+% flationg options
+\usepackage{float}
+
+% sentecijos
+\usepackage{epigraph} 
+
+% referinimas ne skaiciumi, o pavadinimu
+\usepackage{nameref}
+
+
+\usepackage{ifpdf}
+\ifpdf
+\usepackage{pdfpages}
+\usepackage[pdftex]{hyperref}
+\fi
+
+
+\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage[tableposition=top]{caption}
+\usepackage{ifthen}
+
+\usepackage{multirow} % multicell in table
+
+\definecolor{shadecolor}{rgb}{0.933, 0.933, 0.933}
+
+
+\begin{document}
+
+
+
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+library(xtable)
+
+opts_chunk$set(background="#EEEEEE",tidy=FALSE,size="footnotesize") 
+knit_theme$set("acid")  # knit_theme$get()[1]
+options(width=90)
+
+load("RPackages.RData")
+
+UsefullPackages <- function(tags){
+  packages <- TakePackages(tags, print=FALSE)
+  print(xtable(packages
+               , caption = paste("Usefull packages of `",paste(tags,collapse=", "), "`.", sep="")
+               , digits = 1
+               , align = "|l|lcl|"
+        )
+    ,include.rownames=FALSE
+    ,caption.placement="top"
+    ,table.placement="H"
+  )
+}
+
+@
+
+
+\title{R notes}
+\author{Vygantas Butkus}
+\maketitle
+
+
+http://adv-r.had.co.nz/
+
+\section{Basic}
+
+<<Basic,eval=FALSE>>=
+
+### Time
+  proc.time()
+  system.time()
+
+### debug # c, n, where, Q;  
+  # options(error = recover) 
+  debug()
+  browser()
+  trace()
+  recover()
+  traceback()
+
+### Search in environment:
+  ?ls; ?objects  # List Objects
+  ?search   # Give Search Path for R Objects
+  ?apropos; ?find  # Find Objects by (Partial) Name
+  ?get      # Return the Value of a Named Object
+
+### Object analysis:
+  x <- matrix(1:4-0.5,2,2)
+  class(x)        # matrix
+  mode(x)         # numeric 
+  storage.mode(x) # double
+  typeof(x)       # double
+  attributes(x)   # dim [1] 2 2
+  names(x)        # NULL  
+  terms(lm(Sepal.Length ~ Sepal.Width, data=iris)) # For models
+
+  # S3
+  methods(class="matrix")	          # the list of all S3 methods
+  methods("summary")                # functions of `summary` by class
+  getS3method("summary", "matrix")  # Get the body of the function
+  getClass("matrix")
+
+  # S4
+  library("Matrix")
+  mat <- Matrix(1:6, 3, 2)  # S4 object  
+  getClass(class(mat))  # or `showClass(class(mat))`
+  getSlots(class(mat))  # or `slotNames(mat)`
+  mat@Dim
+  methods(class = "Matrix")
+  showMethods(class = "Matrix")
+
+### Set operations:
+  union(x, y)
+  intersect(x, y)
+  setdiff(x, y)
+  setequal(x, y)
+  is.element(el, set)
+  subset(old,logical)
+
+### Index, match
+  a %in% b
+  match()
+  which()
+
+### Loopless
+  tapply()    # Apply a Function Over a Ragged array. General, good and fast
+  by()        # `tapply` for `data.frame` (or matrix)
+  aggregate() # Compute Summary Statistics of Data Subsets
+  apply()     # Apply Functions Over Array Margins
+  mapply()    # Apply a Function to Multiple List or Vector Arguments
+  outer()     # Outer Product of Arrays
+  Vectorize() # Vectorize a Scalar Function
+  # Apply a Function over a List or Vector:
+  lapply()
+  sapply() 
+  replicate()
+
+### Sequences
+  rep(1:4, each = 2)   # 1 1 2 2 3 3 4 4
+  rep(1:4, c(2,1,2,1)) # 1 1 2 3 3 4
+  seq(1, 9, by = pi)	 # 1.000000 4.141593 7.283185
+  sequence(c(3,2))	   # 1 2 3 1 2
+  seq_along(5:10)      # 1 2 3 4 5 6
+  unique()
+  duplicated()
+
+### Combinatorics, possible combinations, brudforce:
+  combn(x, m, FUN = NULL)	# All Combinations of n Elements, Taken m at a Time (with sunction)
+  expand.grid()	            # All combinations (with simetry)
+  choose(n, k)	#pasirinkimu skaicius (C is n po K)
+  factorial(n)
+  combinations()	#from gtools
+  permutations()	#from gtools
+
+### Vector, matrix
+  # manipulation
+  subset()
+  with();within()
+
+  # Ordering
+  order()
+  sort.list()
+  sort()
+  arrange() # drom plyr package
+  rank()
+  # appending
+  cbind()
+  rbind()
+  append()
+  # calculation
+  A %*%	B		#matricu daugyba
+  tcrossprod()		# fast product
+  outer(X, Y, FUN="*", ...)			# outer product {%o%}
+  kronecker(X, Y, FUN = "*")		# kronecer product {%x%}  
+  # Misc
+  colSums(); rowSums() 
+  split(); cut()  # grouping
+  rev()       # reverse
+  embed(x,2) 	# laged matrix
+
+### Functions, solutions
+  optim()       # General optimisation
+  optimize()      # one dimension optimisation 
+  constrOptim()   # constrain optimisation 
+  uniroot()     # the root of monotone functions
+  nlm()  	# Non-linear minimisation
+  nlminb()		# More robust (non-)constrained non-linear minimisation
+
+### Strings: 
+  paste()
+  format()
+  formatC()
+  # Substrings (vectorised, can raplece)
+  substr(x, start, stop)
+  substring(text, first, last = 1000000L)
+  # replacments
+  sub(pattern, replacement, x)
+  gsub(pattern, replacement, x)
+  # Find patern
+  grep(pattern, x) ;
+  grepl(pattern, x)
+  # find expresion
+  regexpr(pattern, text)
+  gregexpr(pattern, text)
+  # interpretation
+  eval(parse(text = "(d <- 4 + 7)"))
+  substitute(expr, env)
+  # misc 
+  strsplit("a,b;c", ",|;") # a, b, c 
+  nchar() # the length of string
+  chartr() # traslete: L -> L
+  tolower()
+  toupper()
+  as.numeric(as.character(f)) # factor - > number
+
+### Files
+  ?files         # Help on low-level interface to file system
+  list.files()   # List files in a give directory
+  file.info()    # Get information about files
+
+
+### Misc: 
+  interaction()   # Joining factors
+  x %% y 	  #mod 
+  x %/% y 	#div
+  identical()
+  
+### Built-in constants:
+  pi;letters;LETTERS   # Pi, lower & uppercase letters, e.g. letters[7] = "g"
+  month.abb;month.name # Abbreviated & full names for months
+
+
+### Graphics
+  help(package=graphics) # List all graphics functions
+  
+  plot()                # Generic function for plotting of R objects
+  par()                 # Set or query graphical parameters
+  curve(5*x^3,add=T)    # Plot an equation as a curve
+  points(x,y)           # Add another set of points to an existing graph
+  arrows()              # Draw arrows [see errorbar script]
+  abline()              # Adds a straight line to an existing graph
+  lines()               # Join specified points with line segments
+  segments()            # Draw line segments between pairs of points
+  hist(x)               # Plot a histogram of x
+  pairs()               # Plot matrix of scatter plots
+  matplot()             # Plot columns of matrices
+  boxplot()
+
+  ?identify  
+
+  ?device               # Help page on available graphical devices
+  ?dev.control 
+  postscript()          # Plot to postscript file
+  pdf()                 # Plot to pdf file
+  png()                 # Plot to PNG file
+  jpeg()                # Plot to JPEG file
+  X11()                 # Plot to X window
+  persp()               # Draws perspective plot
+  contour()             # Contour plot
+  image()               # Plot an image
+  dev.off() 
+
+  x= recordPlot()                           #save the current plot device output in the object x
+  replayPlot(x)                            #replot object x
+  layout(mat)                         #specify where multiple graphs go on the page
+                                      #experiment with the magic code from Paul Murrell to do fancy graphic location
+  layout(rbind(c(1, 1, 2, 2, 3, 3),
+               c(0, 4, 4, 5, 5, 0)))   
+  for (i in 1:5) {
+    plot(i, type="n")
+    text(1, i, paste("Plot", i), cex=4)
+  }
+
+### Statistical 
+  help(package=stats)   # List all stats functions
+  
+  ?Chisquare            # Help on chi-squared distribution functions
+  ?Poisson              # Help on Poisson distribution functions
+  help(package=survival) # Survival analysis
+  
+  cor.test()            # Perform correlation test
+  cumsum(); cumprod(); cummin(); cummax()   # Cumuluative functions for vectors
+  density(x)            # Compute kernel density estimates
+  ks.test()             # Performs one or two sample Kolmogorov-Smirnov tests
+  loess(); lowess()     # Scatter plot smoothing
+  mad()                 # Calculate median absolute deviation
+  mean(x); weighted.mean(x); median(x); min(x); max(x); quantile(x)
+  rnorm(); runif()      # Generate random data with Gaussian/uniform distribution
+  splinefun()           # Perform spline interpolation
+  smooth.spline()       # Fits a cubic smoothing spline
+  sd()                  # Calculate standard deviation
+  summary(x)            # Returns a summary of x: mean, min, max etc.
+  t.test()              # Student's t-test
+  var()                 # Calculate variance
+  sample()              # Random samples & permutations
+  ecdf()                # Empirical Cumulative Distribution Function
+  qqplot()              # quantile-quantile plot
+
+### Help
+  ?Control     # Help on control flow statements (e.g. if, for, while)
+  ?Extract     # Help on operators acting to extract or replace subsets of vectors
+  ?Logic       # Help on logical operators
+  ?Mod         # Help on functions which support complex arithmetic in R
+  ?Paren       # Help on parentheses
+  ?regex       # Help on regular expressions used in R
+  ?Syntax      # Help on R syntax and giving the precedence of operators
+  ?Special     # Help on special functions related to beta and gamma functions
+
+
+
+
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data}
+
+\subsection{Input-Output}
+
+Main base functions:
+<<DataInputBase,eval=FALSE>>=
+?read.table  # ..., Reads a file in table format and creates a data frame from it
+?scan        # Read data into a vector or list from the console or file
+?readLines   # Read Text Lines from a Connection
+?readBin     # read binary data
+
+?connections    # ..., Functions to Manipulate Connections
+?textConnection # Text Connections
+
+?save; load         # Reload Saved Datasets
+?readRDS; ?saveRDS; # Functions to write a single R object to a file, and to restore it.
+@
+
+
+<<DataIOPackages,echo=FALSE, results="asis">>=
+UsefullPackages(c("data", "input-output"))
+@
+
+
+See also:
+\nameref{sec:Database}
+
+\subsubsection*{Special examples}
+<<InputOutputExamples,eval=TRUE,out.line=4>>=
+text <- "
+1 2 3
+4 5 6
+7 8 9
+"
+read.table(textConnection(text))
+@
+
+
+
+\subsection{Manipulation}\label{sec:Manipulation}
+
+
+<<DataManipulationPackages,echo=FALSE, results="asis">>=
+UsefullPackages(c("data", "manipulation"))
+@
+
+\subsubsection*{Special examples}
+<<DataManipulationExamples,echo=TRUE>>=
+
+# list -> matrix
+list2mt <- function(lst){
+  return(do.call(rbind, lst))
+}
+
+# matrix -> list
+mt2list <- function(mt){
+	return(split(mt, row(mt)))
+} 
+
+# sort matrix by colums. 
+msort <- function(mt, sortnr=1, desc=FALSE){
+  if(desc) mt <- -mt
+  
+  if(length(sortnr)==1){
+    return(mt[order(mt[,sortnr]),]) 
+  }else{
+    return(mt[do.call(order,mt2list(t(mt[,sortnr]))),])   
+  }    
+}
+
+# sort DF. See also: arrange {plyr}
+esort <- function(df, sortvar, ...) {
+	attach(df,warn.conflicts = FALSE )
+	df <- df[with(df,order(sortvar,...)),]
+	detach(df)
+	return(df)
+}
+
+@
+
+
+\subsection{Database}\label{sec:Database}
+
+<<DataDatabase,echo=FALSE, results="asis">>=
+UsefullPackages(c("data", "database"))
+@
+
+
+
+\subsection{Big-Data}
+
+<<DataBigData,echo=FALSE, results="asis">>=
+UsefullPackages(c("data", "big-data"))
+@
+
+\begin{itemize}
+\item Package `bigmemory` is from the family of `big data`. The whole list: 
+bigmemory, biganalytics, bigtabulate, bigalgebra.
+
+\item Nowadays it is in very active development MapReduce jobs in Hadoop,
+that is implimented in `rmr` package.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Programing}
+
+\subsection{Debuging}
+
+<<DebugingExamples,eval=FALSE>>=
+
+##### Debuging. RStudio has quite good debuging tools for deep debuging.
+    # The strategy there to start
+    # 1) Then the error occurs use
+    traceback()
+    # 2)Use
+    options(error=recover);
+    # or 
+    options(error=browser);
+    # (after debuging set `options(error=NULL);` )
+    # and rerun the code. In error you can start exploring.
+    # 3) Finily use
+    with_debug(install()) # in package developing (with devtools)
+    debug() 
+    browser()
+    # or break points in RStudio for deap investigation.
+    # 4) for source code and scripts use
+    findLineNum() 
+    setBreakpoint()
+@
+
+\subsection{Compiling}
+<<CompilingExamples,eval=TRUE,cache=TRUE>>=
+##### Compiling. Good for looping or smth.
+    # If caling external function - have no speed benefit.
+    # Be aware of recursion - must compile with same name (prefered) or resursion sould use `Rcall`
+    # Compiling with same name is OK
+
+library("compiler")
+# ?cmpfun
+
+### Matrix multiplication with a lot of loops
+MM <- function(A, B){
+  if(dim(A)[2]!=dim(B)[1]) stop("incompatable")
+  v <- dim(A)[2]
+  ans <- matrix(NA, dim(A)[1], dim(B)[2])
+  for(i in 1:dim(ans)[1]){
+    for(j in 1:dim(ans)[2]){
+      dum <- 0
+      for(k in 1:v){
+        dum <- dum + A[i, k]*B[k, j]
+      }
+      ans[i,j] <-  dum 
+    }
+  }
+  ans  
+}
+MMC <- cmpfun(MM)
+
+### test
+A <- matrix(1:6, 2, 3)
+B <- matrix(1:12, 3, 4)
+all.equal(A %*% B, MM(A, B))
+all.equal(A %*% B, MMC(A, B))
+
+### speed
+require("rbenchmark")
+
+A <- matrix(rnorm(20*10), 20, 10)
+B <- matrix(rnorm(10*30), 10, 30)
+benchmark(MM(A, B), MMC(A, B), A%*%B)
+
+### Function compiling it self - it is OK
+MM <- cmpfun(MM)
+benchmark(MM(A, B), MMC(A, B), A%*%B)
+
+@
+
+
+\subsection{Recursion}
+<<RecursionExamples,eval=TRUE,cache=TRUE>>=
+##### Compiling. Good for looping or smth.
+    # 1. Avoid it,  if you know alternatives
+    # 2. Do not use Recall (unless you really need renaming)
+    # 3. If possible use some kind memoise
+    # 4. Compile (with same name)
+
+fibonacci1 <- function(seq) {
+  if (seq == 1) return(1);
+  if (seq == 2) return(1);
+  return (fibonacci1(seq - 1) + fibonacci1(seq - 2));
+}
+
+
+fibonacci2 <- function(seq) {
+  if (seq == 1) return(1);
+  if (seq == 2) return(1);
+  return (Recall(seq - 1) + Recall(seq - 2)); # Do not use! it jus slow down
+}
+
+
+library("memoise")
+fibonacci1M <- memoise(fibonacci1)  # must be with new name
+
+fibonacci_M <- local({
+  memo <- c(1, 1, rep(NA, 100000))
+  f <- function(x) {
+    if(x == 0) return(0)
+    if(x < 0) return(NA)
+    if(x > length(memo))
+      stop("’x’ too big for implementation")
+    if(!is.na(memo[x])) return(memo[x])
+    ans <- f(x-2) + f(x-1)
+    memo[x] <<- ans
+    ans
+  }
+})
+
+require("rbenchmark")
+n <- 20
+benchmark(fibonacci1(n), fibonacci2(n), fibonacci1M(n), fibonacci_M(n), order=NULL)
+@
+
+\subsection{Developing}
+
+Creating and dveloping packages.
+
+<<ProgramingDeveloping,echo=FALSE, results="asis">>=
+UsefullPackages(c("programing", "developing"))
+@
+
+
+
+
+<<DevelopingExamples,eval=FALSE>>=
+library("devtools")
+help(package="devtools")
+
+##### 1.  Creating package folder with necesary infrastructure (use one folder up)  
+    #  And put the content that you allready have.
+    # Sugestions:
+    # a) basic in-buld sunction
+    package.skeleton()  
+    # b) devtools function    
+    create()
+    # c) RStudio meniu
+    # d) From other packages. Very usefull for optional failes.
+
+##### 2.  Codding. Start coding in R folder. 
+    # The loan can be done by
+    load_all()  # devtools
+    # If you allready have some version of the package that is curently in use you
+    # can isolate developing code in 
+    dev_mode()  # devtools
+
+##### 3. Then having starting code you should write tests to make sure everything works as
+    # intended to be. 
+    library("testthat")
+    ?test
+    ?test_that
+
+##### 4. Profiling
+    Rprof
+    summaryRprof
+    library("profr")
+    help(package="profr")
+
+##### 5. Preparing code. Making well format, commenting (+documentation in comment with roxygen2)
+    library("formatR")
+    help(package="formatR")
+
+
+##### 6. Documentation
+  ### For functions. use one of the strategies (you can mix them, but it is not rezomended):
+    # a) manual documentation
+    ?prompt #Produce Prototype of an R Documentation File
+    check_doc() 
+    # b) in-code documentation
+    library("roxygen2")
+    ?document  # Use roxygen to make documentation
+    ?roxygenize
+  ### Do not foget to
+    # Writing ReadMe
+    # writing vinigete.
+    # demo
+    # package description
+    dev_help("Vmisc")
+    build_vignettes()
+
+##### 7. local install
+    install(quick=TRUE)
+    library("Vmisc")
+    help(package="Vmisc")
+
+
+##### 8. final scheck, and bild
+    check()
+    build()
+    # ?release
+
+@
+
+\subsubsection{Vignettes}
+
+\begin{itemize}
+
+\item A vignettes should be writen in \emph{vignettes} packege. 
+All necesary files sould be in this directory (or subdirectory).
+
+\item The vignettes could be Rnw(pdf) ir Rmd(html). Let assume ir is Rnw.
+
+\item Meta data should be included in the comments. Main list:
+\begin{verbatim}
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Just a pdf example}
+%\VignetteDepends{}
+%\VignetteKeywords{string, misc}
+%\VignettePackage{Vmisc}
+\end{verbatim}
+
+\item If Vignette source file is Rwn, then it could be clasical Sweave or other (e.g. \emph{knitr}).
+If using \emph{knitr}, then
+  \begin{itemize}
+    \item it sould be decleard in meta-date comment (note the first line).
+    \item it sould be declear in DESCRIPTION file, line 'VignetteBuilder: knitr'
+    \item knitr package should be included in DESCRIPTION file 'Suggests' filed, e.g : Suggests: knitr, ...
+  \end{itemize}
+\end{itemize}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Special topics}
+
+\subsection{Search in environment}
+
+<<SearchBase,eval=FALSE>>=
+### Search in environment, base functions
+?ls; ?objects     # List Objects
+?search           # Give Search Path for R Objects
+?apropos; ?find   # Find Objects by (Partial) Name
+?get              # Return the Value of a Named Object
+@
+
+\subsubsection*{Special examples}
+<<SearchExamples,eval=TRUE,out.line=4>>=
+head(ls("package:base", pattern="str"))
+head(apropos("str"))
+@
+
+
+
+
+\subsection{Strings}\label{sec:strings}
+<<StringBase,eval=FALSE>>=
+### Strings: 
+  paste()
+  format()
+  formatC()
+  # Substrings (vectorised, can raplece)
+  substr(x, start, stop)
+  substring(text, first, last = 1000000L)
+  # replacments
+  sub(pattern, replacement, x)
+  gsub(pattern, replacement, x)
+  # Find patern
+  grep(pattern, x) ;
+  grepl(pattern, x)
+  # find expresion
+  regexpr(pattern, text)
+  gregexpr(pattern, text)
+  # interpretation
+  eval(parse(text = "(d <- 4 + 7)"))
+  substitute(expr, env)
+  # misc 
+  strsplit("a,b;c", ",|;") # a, b, c 
+  nchar() # the length of string
+  chartr() # traslete: L -> L
+  tolower()
+  toupper()
+  as.numeric(as.character(f)) # factor - > number
+@
+
+<<Strings,echo=FALSE, results="asis">>=
+UsefullPackages(c("strings"))
+@
+
+
+
+\subsubsection*{Special examples}
+<<StringExamples,eval=TRUE,out.line=4>>=
+### Basic operations
+text <- "Hellow, # comment
+
+     The line after empty line       with     lots   of   sapces.     
+"
+doc <- readLines(textConnection(text))
+# remove comments
+doc <- gsub("#.+$", "", doc)
+# remove dublicate space
+doc <- gsub("\\s+", " ", doc)
+# Trim the rest
+doc <- gsub("^\\s+|\\s+$", "", doc)
+# remove empty lines
+doc <- doc[nchar(doc)>0]
+doc
+
+### reverse
+(a = "this is a string"); paste(rev(substring(a,1:nchar(a),1:nchar(a))),collapse="")
+
+### vecorise string substitution
+(x <- c("aaaa","bbbb","cccc")); substring( x  , 2) <- c("..", "+++"); x; 
+
+
+
+### Binary string concat
+"%.%" <- function(x,y) paste(x,y,sep="")
+"I love " %.% "R."
+
+### String matrix spliting
+SplitLines <- function(x, chMode, sep=" "){
+  ats = do.call(rbind, strsplit(x, sep))
+  if (!missing(chMode)){
+    storage.mode(ats)<-chMode
+  }	
+  return(ats)
+}
+text <-c( 
+   "1 2 3"
+  ,"4 5 6"
+  ,"7 8 9"
+)
+X <- SplitLines(text,"double")
+X
+
+# Alternative from data input:
+read.table(textConnection(text))
+
+@
+
+
+
+\subsection{Graphs}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Graphics}
+
+
+
+
+\appendix
+
+\section{Drafts}
+
+
+
+\end{document}

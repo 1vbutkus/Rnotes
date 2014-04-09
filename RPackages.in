@@ -1,0 +1,571 @@
+
+
+
+################
+##### Data #####
+################
+
+### IO ###
+package: foreign 
+rating: 9
+tags:data,input-output
+comment: there is no better package for various inputs, 
+although there are some inconvenience.
+ 
+package: XML2R 
+rating: 8
+tags: data,input-output,internet
+comment: it is an extension of XML package.
+   
+package: XLConnect 
+tags: data,input-output,excel
+comment: very good excel manipulation tools, on the other hand, 
+it is slow and some times crashes.
+# install:FALSE
+
+package: xlsx 
+rating: 7
+tags: data,input-output,excel
+# install:FALSE
+
+
+### manipulation ###
+
+package: plyr 
+rating: 9.1
+tags:data,manipulation
+comment: is is a leader of data manipulation package. 
+ 
+package: reshape2
+rating: 9
+tags:data,manipulation
+comment: very good package for data manipulation. 
+Alternative for `plyr`. New version of `reshape`.
+
+package:sqldf
+rating: 7
+tags:data,manipulation
+comment: helps to work with dataframe as with regular SQL data base.
+
+package: gdata 
+rating: 5
+tags:data,manipulation
+comment: no experience. 
+
+package: abind 
+rating: 5
+tags:data,manipulation
+comment: no experience. 
+
+
+### database
+
+package: RMySQL 
+rating: 7
+tags:data,database
+comment: the best alternative for MySQL. Sometimes need time for installation.
+
+package: RODBC 
+rating: 7
+tags:data,database,IO
+comment: easy connection to any source via RODBC (but nos so fast)
+install:FALSE
+
+package: RSQLite 
+rating: 7
+tags:data,database
+comment: SQLite is good SQL database engine with out configuration and service.
+Never try, but worth trying.
+
+
+### big-data 
+
+package: bigmemory 
+rating: 7
+tags:data,big-data 
+comment: The family of big data. The whole list - 
+bigmemory, biganalytics, bigtabulate, bigalgebra.
+
+package: ff 
+rating: 7
+tags:data,big-data 
+
+package: biglm 
+rating: 7
+tags:data,big-data 
+
+package: data.table 
+rating: 7
+tags:data,big-data,data.frame
+comment: an extentition of data.frame for big data.
+
+
+
+######################
+##### programing #####
+######################
+
+package: installr   #  Using R to install stuff (such as: R, Rtools, RStudio, git, and more!)
+rating: 7
+tags:programing, OOP
+comment:  Prototype object-based programming
+install:FALSE
+
+package: proto 
+rating: 7
+tags:programing, OOP
+comment:  Prototype object-based programming
+
+package: R.oo 
+rating: 7
+tags:programing, OOP
+comment:  see also help(ReferenceClasses)
+
+package: foreach 
+rating: 7
+tags:programing
+comment:  Foreach looping construct for R. Paralel computation.
+
+package: doParallel 
+rating: 7
+tags:programing
+comment:  Paralel computation.
+
+package: evaluate 
+rating: 7
+tags:programing,strings
+comment:  Parsing and evaluation tools that provide more details than the default
+
+package: compiler 
+rating: 7
+tags:programing
+comment:  R code compilation
+
+package: gtools 
+rating: 7
+tags:programing
+comment:  Various R programming tools
+	 	
+package: Rcpp 
+rating: 7
+tags:programing,CPP
+comment:  Seamless R and C++ Integration
+
+package: inline 
+rating: 7
+tags:programing,CPP
+comment:  unctionality to dynamically define R functions and S4 methods with in-lined C, C++ or Fortran 
+
+# https://netbeans.org/
+# http://www.codeblocks.org/features
+
+package: httr 
+rating: 7
+tags:programing,internet
+comment:  simpifies the package `RCurl`
+
+package: RCurl 
+rating: 7
+tags:programing,internet
+comment:  automates the testing of my code
+
+package: Rmpfr 
+rating: 5.1
+tags:programing,precision
+comment:  need extra library- sudo apt-get install libmpfr-dev
+
+package: gmp 
+rating: 5
+tags:programing,precision
+comment:  need extra library- sudo apt-get install libmpfr-dev
+
+package: memoise 
+rating: 5
+tags:programing,cache
+comment:  
+
+
+
+### developing
+ 	
+package: devtools 
+rating: 7
+tags:programing,developing
+comment: Tools to make developing R code easier.
+Worth investigation.
+
+package: formatR 
+rating: 7
+tags: programing,developing
+comment: format R Code Automatically
+
+
+package: roxygen2 
+rating: 7
+tags:programing,developing
+comment: which allows you to keep documentation next to the function it documents
+
+package: testthat 
+rating: 7
+tags:programing,developing
+comment:  automates the testing of my code
+
+package: profr 
+rating: 7
+tags:programing,developing,profile
+comment: particularly the unreleased interactive explorer, makes it easy for me to find bottlenecks in my code.
+
+package: rbenchmark 
+rating: 7
+tags:programing,developing,profile
+comment: 
+
+
+
+#######################
+##### interactive #####
+#######################
+
+package: Rcmdr 
+rating: 7
+tags:interactive
+
+package: igraph 
+rating: 7
+tags:interactive
+
+package: playwith 
+rating: 7
+tags:interactive
+
+
+#######################
+####### output ########
+#######################
+# Dar gali praverti koeliu modeliu palyginimu paketas
+
+package: knitr 
+rating: 7
+tags:output
+
+package: markdown 
+rating: 7
+tags:output
+
+package: xtable 
+rating: 7
+tags:output
+
+# ###########################
+# ####### extentions ########
+# ###########################
+
+
+package: stringr # Make it easier to work with strings
+rating: 7
+tags:extentions,strings
+
+package: Matrix # Sparse and Dense Matrix Classes and Methods
+rating: 7
+tags:extentions,matrix
+
+package: matrixcalc # Collection of functions for matrix calculations
+rating: 7
+tags:extentions,matrix
+
+package: chron # Chronological objects which can handle dates and times
+rating: 7
+tags:extentions,date
+
+package: lubridate # dates in R
+rating: 7
+tags:extentions,date
+
+
+package: xts # eXtensible Time Series
+rating: 7
+tags:extentions,ts
+
+ 
+# ###########################
+# ########## Misc ###########
+# ###########################
+
+package: Hmisc # Harrell Miscellaneous (top)
+rating: 7
+tags:misc
+
+package: e1071 # Misc Functions of the Department of Statistics (e1071), TU Wien
+rating: 7
+tags:misc
+
+package: MASS   # Functions and datasets to support Venables and Ripley, 'Modern Applied Statistics with S' (4th edition, 2002).
+rating: 7
+tags:misc
+
+
+# ##################################
+# ############## graph #############
+# ##################################
+
+
+package: ggplot2		# An implementation of the Grammar of Graphics
+rating: 7
+tags:graph
+
+package: colorspace	# Color Space Manipulation
+rating: 7
+tags:graph
+
+package: RColorBrewer	# ColorBrewer palettes
+rating: 7
+tags:graph
+
+package: scales		# Scale functions for graphics
+rating: 7
+tags:graph
+
+package: labeling 	# Axis Labeling
+rating: 7
+tags:graph
+
+package:  rgl 		# 3D visualization device system (OpenGL)
+rating: 7
+tags:graph
+
+package:  lattice 	# Lattice Graphics (?)
+rating: 7
+tags:graph
+
+package:  gplots 		# Various R programming tools for plotting data
+rating: 7
+tags:graph
+
+package:  vcd 		# Visualizing Categorical Data
+rating: 7
+tags:graph
+
+package: scatterplot3d 	# 3D Scatter Plot
+rating: 7
+tags:graph
+
+package: plotrix 	# Various plotting functions
+rating: 7
+tags:graph
+
+package: aplpack 	# Another Plot PACKage - stem.leaf, bagplot, faces, spin3R, and some slider functions
+rating: 7
+tags:graph
+
+package: latticeExtra 	# Extra Graphical Utilities Based on Lattice
+rating: 7
+tags:graph
+
+package: munsell 	# Munsell colour system
+rating: 7
+tags:graph
+
+package: iplots 	
+rating: 7
+tags:graph,interactive
+
+
+# ##################################
+# ########## calculation ###########
+# ##################################
+
+package: lpSolve   # Linear programing
+rating: 7
+tags:calculation,optimisation
+
+package: quadprog   # Functions to solve Quadratic Programming Problems
+rating: 7
+tags:calculation,optimisation
+
+package: alabama   # Constrained nonlinear optimization
+rating: 7
+tags:calculation,optimisation
+
+package: nleqslv   # Solve systems of non linear equations
+rating: 5
+tags:calculation,equations
+
+package: rootSolve   # Solve systems of non linear equations
+rating: 5
+tags:calculation,equations
+
+package: numDeriv   # Numeric derivative
+rating: 7
+tags:calculation,derivatives
+
+
+
+# ##################################
+# ############ modeling ############
+# ##################################
+
+package: sem 		# Structural Equation Models
+rating: 7
+tags:modeling
+
+package: coda 		# Output analysis and diagnostics for MCMC
+rating: 7
+tags:modeling
+
+package: KernSmooth 	# Functions for kernel smoothing for Wand &amp Jones (1995)
+rating: 7
+tags:modeling
+
+package: mvtnorm 	# Multivariate Normal and t Distributions
+rating: 7
+tags:modeling
+
+package: caTools 	# Tools: moving window statistics, GIF, Base64, ROC AUC, etc
+rating: 7
+tags:modeling
+
+package: multcomp 	# Simultaneous Inference in General Parametric Models
+rating: 7
+tags:modeling
+
+package: timeSeries 	# Rmetrics – Financial Time Series Objects
+rating: 7
+tags:modeling
+
+package: timeDate 	# Rmetrics – Chronological and Calendar Objects
+rating: 7
+tags:modeling
+
+package: fBasics 	# Rmetrics – Markets and Basic Statistics
+rating: 7
+tags:modeling
+
+package:  mgcv 		# Mixed GAM Computation Vehicle with GCV/AIC/REML smoothness estimation
+rating: 7
+tags:modeling
+
+package:  akima 		# Interpolation of irregularly spaced data
+rating: 7
+tags:modeling
+
+package:  arules		# : it provides basket analysis and association rules like “if she bought X then she will buy Y as well” rules. It has so many options!.
+rating: 7
+tags:modeling
+
+
+# ### statistics 
+# 
+# ## ts
+
+package:  zoo		    # S3 Infrastructure for Regular and Irregular Time Series (Z’s ordered observations)
+rating: 7
+tags:statistics,ts
+
+package:  tseries 	# Time series analysis and computational finance
+rating: 7
+tags:statistics,ts
+
+package:  forecast 	# Forecasting functions for time series and linear models
+rating: 7
+tags:statistics,ts
+
+package:  robustbase 	# Basic Robust Statistics
+rating: 7
+tags:statistics,ts
+
+package:  modeltools 	# Tools and Classes for Statistical Models
+rating: 7
+tags:statistics,ts
+
+package:  SparseM 	# Sparse Linear Algebra
+rating: 7
+tags:statistics,ts
+
+package:  survival 	# Survival Analysis
+rating: 7
+tags:statistics,ts
+
+
+# ## regresion 
+
+package:  car 	 # Companion to Applied Regression
+rating: 7
+tags:statistics,regresion
+
+package: lmtest 		# Testing Linear Regression Models
+rating: 7
+tags:statistics,regresion
+
+package: sandwich 	# Robust Covariance Matrix Estimators
+rating: 7
+tags:statistics,regresion
+
+package: leaps 		# regression subset selection
+rating: 7
+tags:statistics,regresion
+
+package: nlme 		# Linear and Nonlinear Mixed Effects Models
+rating: 7
+tags:statistics,regresion
+
+package: lme4 		# Linear mixed-effects models using S4 classes
+rating: 7
+tags:statistics,regresion
+
+package: effects 	# Effect  for Linear, Generalized Linear, Multinomial-Logit, Proportional-Odds Logit Models and Mixed-Effects Models
+rating: 7
+tags:statistics,regresion
+
+package: quantreg 	# Quantile Regression
+rating: 7
+tags:statistics,regresion
+
+package: strucchange 	# Testing, Monitoring, and Dating Structural Changes
+rating: 7
+tags:statistics,regresion
+
+package: relimp 		# Relative Contribution of Effects in a Regression Model
+rating: 7
+tags:statistics,regresion
+
+# ### learning 
+
+package: randomForest 	# Breiman and Cutler’s random forests for classification and regression
+rating: 7
+tags:statistics,learning
+
+package: nnet 		# Feed-forward Neural Networks and Multinomial Log-Linear Models
+rating: 7
+tags:statistics,learning
+
+
+package: kernlab 	# Kernel-based Machine Learning Lab
+rating: 7
+tags:statistics,learning
+
+package: tree 		# Classification and regression trees
+rating: 7
+tags:statistics,learning
+
+package: rpart 		# Recursive Partitioning
+rating: 7
+tags:statistics,learning
+
+package: cluster		# : a must. It provides basic clustering techniques as k-means, PAM, CLARA and silhouette representations, among others.
+rating: 7
+tags:statistics,learning
+
+
+# it isn’t really just a package but a whole set of data-mining techniques. 
+# It provides its own implementation of other techniques as kmeans and so 
+# but I found very useful its PCA methods for factorial analysis.
+
+package:FactoMineR	
+rating: 7
+tags:statistics,learning
+
+#########################################################################3
+# rgl
+# nlme
+
+
