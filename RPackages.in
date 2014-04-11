@@ -156,9 +156,6 @@ rating: 7
 tags:programing,CPP
 comment:  unctionality to dynamically define R functions and S4 methods with in-lined C, C++ or Fortran 
 
-# https://netbeans.org/
-# http://www.codeblocks.org/features
-
 package: httr 
 rating: 7
 tags:programing,internet
@@ -220,6 +217,10 @@ rating: 7
 tags:programing,developing,profile
 comment: 
 
+package: microbenchmark 
+rating: 7
+tags:programing,developing,profile
+comment: 
 
 
 #######################

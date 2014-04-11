@@ -48,8 +48,10 @@
 <<setup, include=FALSE, cache=FALSE>>=
 library(knitr)
 library(xtable)
+library("microbenchmark")
+library("Rcpp")
 
-opts_chunk$set(background="#EEEEEE",tidy=FALSE,size="footnotesize") 
+opts_chunk$set(background="#EEEEEE", tidy=FALSE, size="footnotesize", cache=TRUE) 
 knit_theme$set("acid")  # knit_theme$get()[1]
 options(width=90)
 
@@ -240,6 +242,7 @@ http://adv-r.had.co.nz/
   x %% y 	  #mod 
   x %/% y 	#div
   identical()
+  suppressMessages
   
 ### Built-in constants:
   pi;letters;LETTERS   # Pi, lower & uppercase letters, e.g. letters[7] = "g"
@@ -459,7 +462,7 @@ that is implimented in `rmr` package.
 @
 
 \subsection{Compiling}
-<<CompilingExamples,eval=TRUE,cache=TRUE>>=
+<<CompilingExamples,eval=TRUE>>=
 ##### Compiling. Good for looping or smth.
     # If caling external function - have no speed benefit.
     # Be aware of recursion - must compile with same name (prefered) or resursion sould use `Rcall`
@@ -507,7 +510,7 @@ benchmark(MM(A, B), MMC(A, B), A%*%B)
 
 
 \subsection{Recursion}
-<<RecursionExamples,eval=TRUE,cache=TRUE>>=
+<<RecursionExamples,eval=TRUE>>=
 ##### Compiling. Good for looping or smth.
     # 1. Avoid it,  if you know alternatives
     # 2. Do not use Recall (unless you really need renaming)
@@ -550,9 +553,345 @@ n <- 20
 benchmark(fibonacci1(n), fibonacci2(n), fibonacci1M(n), fibonacci_M(n), order=NULL)
 @
 
+
+\subsection{Rcpp(C++)}
+
+The package \texttt{Rcpp} allows to impliment C++ code easily and with minimal knowledge.
+Main links:
+\begin{itemize}  
+  \item http://adv-r.had.co.nz/Rcpp.html
+  \item http://dirk.eddelbuettel.com/code/rcpp/Rcpp-quickref.pdf
+  \item http://cran.r-project.org/web/packages/Rcpp/index.html
+  \item http://www.rcpp.org/
+  \item http://dirk.eddelbuettel.com/code/rcpp/html/index.html
+\end{itemize}
+
+All R types are supported (vectors, functions, environment, etc ...):\\
+IntegerVector, NumericVector, LogicalVector, CharacterVector,\\
+IntegerMatrix, NumericMatrix, LogicalMatrix, CharacterMatrix.\\
+
+The types that do not have C types gos only with capital letter:\\
+List, Function, Environment,..
+
+Good reference could be fould in \texttt{Rcpp-quickref.pdf}. Here is very basic
+\begin{verbatim}
+// Geting values
+  x[i]
+  x(i,j)
+
+//geting info
+  .size()
+  .nrow()
+  .ncol()
+  .length()
+
+//Very importas is iterator, see in examples
+  ::iterator
+  .begin()
+  .end() 
+
+//basic procedures
+  .create
+  .fill
+  .import
+  .insert
+
+//misc
+  .erase
+  .eval
+  .get_na
+  .is_na
+  .offset
+  .sort
+\end{verbatim}
+
+Very first example of making C++ in R. It is jus like 'Hellow world':
+<<Rcpp1>>=
+library("Rcpp")
+cppFunction('
+  int add(int x, int y, int z) {
+    int sum = x + y + z;
+    return sum;
+  }'
+)
+add(1, 2, 3)
+@
+
+An example of misc basics. Writing mean function in several ways. See comments:
+<<Rcpp2>>=
+sourceCpp(code='
+#include <numeric>      // including member of STL library
+#include <Rcpp.h>       // Necesary package for R
+using namespace Rcpp;
+
+// An example of inner function (pass by reference, but protected )
+double SumManual(const NumericVector& x){
+  int n = x.size();
+  double total = 0;
+  for(int i = 0; i < n; ++i) {
+    total += x[i] ;
+  }
+  return total;
+}
+
+// exported function (pass by reference and not protected)
+// The function that is experted to R must have this cooment:
+// [[Rcpp::export]]
+double meanC(NumericVector& x, int type=1) {
+  int n = x.size();
+  double mean = 0;
+  x[0] = 1000; // if calling without `const` this can change the value in x. 
+  
+  if (type==1)
+    mean = sum(x);        // sugal example - an eqvivanlent of sum funtion
+  else if (type==2)
+    mean = SumManual(x);  // our writen function
+  else if (type==3){
+    // Very important example if you want to use librarys
+    // Ussing standart librarys, with iterators. 
+    mean = std::accumulate(x.begin(), x.end(), 0.0);  // STL example (with iterators) 
+  }else{
+    // messages:
+    printf("There are no such type. (Just note).\\n");
+    std::cout << "Another note using std:cout \\n";
+    stop("There are no such type. (stop).\\n");
+  }
+    
+  mean /= n;
+  return mean;
+}
+')
+x <- rnorm(10^2)
+
+# having diferent messages (note: knit do not capture all output)
+meanC(x, type = 0)
+
+# Comparing
+all.equal(mean(x), meanC(x, type=1), meanC(x, type=2), meanC(x, type=3))
+
+microbenchmark(mean(x), meanC(x, type = 1), meanC(x, type = 2), meanC(x, type = 3))
+head(x)
+@
+
+A quickref for matrix
+<<Rcpp_matrixReff,eval=FALSE>>=
+SEXP x;
+NumericMatrix xx(x);
+
+// Matrix of 4 rows & 5 columns (filled with 0)
+NumericMatrix xx(4, 5);
+
+// Fill with value
+int xsize = xx.nrow() * xx.ncol();
+for (int i = 0; i < xsize; i++) {
+  xx[i] = 7;
+}
+// Same as above, using STL fill
+std::fill(xx.begin(), xx.end(), 8);
+
+// Assign this value to single element
+// (1st row, 2nd col)
+xx(0,1) = 4;
+
+// Reference the second column
+// Changes propagate to xx (same applies for Row)
+NumericMatrix::Column zzcol = xx( _, 1);
+zzcol = zzcol * 2;
+// Copy the second column into new object
+NumericVector zz1 = xx( _, 1);
+// Copy the submatrix (top left 3x3) into new object
+NumericMatrix zz2 = xx( Range(0,2), Range(0,2));
+
+@
+
+
+The example of ussing C++ librarys and  \texttt{iterator}. 
+The eqvivalent of the function \texttt{findInterval}. 
+<<Rcpp3>>=
+sourceCpp(code='
+#include <algorithm>    // using advanced templates in STL library
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+IntegerVector findInterval2(NumericVector x, NumericVector breaks) {
+  IntegerVector out(x.size());  // Creating vector of precise size
+  
+  // iterator is similar to pointer - it points in some kind of object and have ability to move
+  // iterator value is address, and the actual value of variable is accessed by *iterator
+  // Definition
+  NumericVector::iterator it, pos;
+  IntegerVector::iterator out_it;
+  // Assigning  
+  NumericVector::iterator BreaksBegin = breaks.begin();
+  NumericVector::iterator breaksEnd = breaks.end();
+
+
+  // iterators intuations: go from beging to end by one step - just like regular `for`, but iteatos are in abstract level,
+  // therefore a lot of algorithms works for specific class, in this case Rcpp::NumericVector
+  for(it = x.begin(), out_it = out.begin(); it != x.end(); ++it, ++out_it) {  // Two iterators in one `for`
+    // the function `upper_bound` requres iterators (First, Last) and the constant values,
+    // therefore we put `*it`
+    pos = std::upper_bound(BreaksBegin, breaksEnd, *it);  // returs iterator, but we need position
+    // distance: Calculates the number of elements between first and last - so it is a possition
+    *out_it = std::distance(BreaksBegin, pos);  // The output can be assigin directily by iterator using *
+  }
+  return out;
+}
+')
+x <- rnorm(10^1)
+breaks <- c(-Inf, -3, -2, -1, 0, 1, 2, 3, Inf)
+all.equal(findInterval(x, breaks), findInterval2(x, breaks))
+microbenchmark(findInterval(x, breaks), findInterval2(x, breaks))
+
+@
+
+
+
+An example of best abstraction: List and Function, without knowing anything C code wors just fine (but slow). 
+<<Rcpp4>>=
+# Function and List: works in CPP, so you can actualy use R function in CPP,
+# but it acually quite slow. Therefore, if posible use R function ir R and C funciton in C.
+# But list is quite usefull - in  fact it can contain any object with out knowing.
+cppFunction(code='
+List lapply1(List input, Function f) {
+  int n = input.size();
+  List out(n);
+  for(int i = 0; i < n; i++) {
+    out[i] = f(input[i]);
+  }
+  return out;
+}
+')
+foo <- function(n) 2^n + 1
+microbenchmark(lapply1(1:3, foo), lapply(1:3, foo))
+@
+
+An example of regular arrays(C) and compatability with R.
+<<Rcpp5>>=
+# Technicly, array in R is jus a vector with atrributes. So C eqvivalnet is Vector.
+# There is no eqvivalnet to get C array (but we have matrix, or 3D cube - they are special calsses)
+sourceCpp(code='
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// REturning a list with all our toys
+// [[Rcpp::export]]
+List arr(NumericVector input, IntegerVector dim, IntegerVector dummy) {
+  
+  Dimension d(dim);                  // get the dim object
+  
+  // making R array with dimensions
+  NumericVector array(d);            // create vec. with correct dims
+  std::copy(input.begin(), input.end(), array.begin());  // copy - it is not optimal, it just an example
+  // now `array` is  NumericVector, but in R it will be an array with dimesnions
+
+  // much better way is to assign dim attribute
+  input.attr("dim") = d;
+
+  return List::create(
+    _["input"] = input, 
+    array     // no name
+  );
+}
+')
+
+x = 1:8
+y = arr(x, c(2,2,2), 1:5)
+@
+
+
+From C to R, From R to C
+<<Rcpp6>>=
+sourceCpp(code='
+#include <iterator>
+#include <vector>
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+List RC(NumericVector input) {
+  
+  // From C to R #1
+  double mynum[] = {0.5,1776,7,4};   // Creating regular C array
+  std::vector<double> foo;           // Creating regualr C vector
+  foo.assign(mynum, mynum + sizeof mynum / sizeof mynum[0]); //assigning values (could be done in creation)
+  SEXP bar = wrap (foo);
+ 
+
+  // From C to R #2 - directly in R eqvivanlent
+  int myint[] = {1776,7,4};
+  NumericVector bar2(myint, myint + sizeof myint / sizeof myint[0]);
+
+  // From R to C #1 
+  double* a = &input[0];  
+  std::cout << a[0] << ", " << a[1]<< ", ...\\n";
+
+  // From R to C #2 
+  double a2[100];
+  std::copy(input.begin(), input.end(), a2);
+  std::cout << a2[0] << ", " << a2[1]<< ", ...\\n";
+
+
+  return List::create(
+    bar,
+    bar2
+  );
+}
+')
+
+x = 1:8
+RC(x)
+@
+
+
+Fast linar algebra, ussing extra package (and it tipes, that are compatable with R)
+<<Rcpp7>>=
+sourceCpp(code='
+#include <RcppArmadillo.h>
+//[[Rcpp::depends(RcppArmadillo)]]
+
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+List fastLm(NumericVector yr, NumericMatrix Xr) {
+
+    int n = Xr.nrow(), k = Xr.ncol();
+
+    arma::mat X(Xr.begin(), n, k, false);       // reuses memory and avoids extra copy
+    arma::colvec y(yr.begin(), yr.size(), false);
+
+    arma::colvec coef = arma::solve(X, y);      // fit model y ~ X
+    arma::colvec resid = y - X*coef;            // residuals
+
+    double sig2 = arma::as_scalar( arma::trans(resid)*resid/(n-k) );
+                                                // std.error of estimate
+    arma::colvec stderrest = arma::sqrt( sig2 * arma::diagvec( arma::inv(arma::trans(X)*X)) );
+
+    return Rcpp::List::create(
+        Rcpp::Named("coefficients") = coef,
+        Rcpp::Named("stderr")       = stderrest
+    ) ;
+}
+
+//[[Rcpp::export]]
+arma::mat mult(arma::mat A, arma::mat B) {
+  return A*B;
+}
+
+')
+
+A <- matrix(1:9, 3, 3);
+B <- matrix(9:1, 3, 3);
+
+microbenchmark(A%*%B, mult(A, B))
+
+@
+
 \subsection{Developing}
 
-Creating and dveloping packages.
+Creating and developing packages.
 
 <<ProgramingDeveloping,echo=FALSE, results="asis">>=
 UsefullPackages(c("programing", "developing"))
@@ -633,10 +972,10 @@ help(package="devtools")
 
 \begin{itemize}
 
-\item A vignettes should be writen in \emph{vignettes} packege. 
-All necesary files sould be in this directory (or subdirectory).
+\item A vignettes should be write in \emph{vignettes} package. 
+All necessary files should be in this directory (or sub-directory).
 
-\item The vignettes could be Rnw(pdf) ir Rmd(html). Let assume ir is Rnw.
+\item The vignettes could be Rn(pd) or Rd(html). Let assume it is Rnw.
 
 \item Meta data should be included in the comments. Main list:
 \begin{verbatim}
@@ -676,6 +1015,7 @@ If using \emph{knitr}, then
 <<SearchExamples,eval=TRUE,out.line=4>>=
 head(ls("package:base", pattern="str"))
 head(apropos("str"))
+
 @
 
 
