@@ -6,40 +6,40 @@
 ################
 
 ### IO ###
-package: foreign 
+package: foreign
 rating: 9
 tags:data,input-output
-comment: there is no better package for various inputs, 
+comment: there is no better package for various inputs,
 although there are some inconvenience.
- 
-package: XML2R 
+
+package: XML2R
 rating: 8
 tags: data,input-output,internet
 comment: it is an extension of XML package.
-   
-package: XLConnect 
-tags: data,input-output,excel
-comment: very good excel manipulation tools, on the other hand, 
-it is slow and some times crashes.
-# install:FALSE
 
-package: xlsx 
+package: XLConnect
+tags: data,input-output,excel
+comment: very good excel manipulation tools, on the other hand,
+it is slow and some times crashes.
+install:FALSE
+
+package: xlsx
 rating: 7
 tags: data,input-output,excel
-# install:FALSE
+install:FALSE
 
 
 ### manipulation ###
 
-package: plyr 
+package: plyr
 rating: 9.1
 tags:data,manipulation
-comment: is is a leader of data manipulation package. 
- 
+comment: is is a leader of data manipulation package.
+
 package: reshape2
 rating: 9
 tags:data,manipulation
-comment: very good package for data manipulation. 
+comment: very good package for data manipulation.
 Alternative for `plyr`. New version of `reshape`.
 
 package:sqldf
@@ -47,54 +47,54 @@ rating: 7
 tags:data,manipulation
 comment: helps to work with dataframe as with regular SQL data base.
 
-package: gdata 
+package: gdata
 rating: 5
 tags:data,manipulation
-comment: no experience. 
+comment: no experience.
 
-package: abind 
+package: abind
 rating: 5
 tags:data,manipulation
-comment: no experience. 
+comment: no experience.
 
 
 ### database
 
-package: RMySQL 
+package: RMySQL
 rating: 7
 tags:data,database
 comment: the best alternative for MySQL. Sometimes need time for installation.
 
-package: RODBC 
+package: RODBC
 rating: 7
 tags:data,database,IO
 comment: easy connection to any source via RODBC (but nos so fast)
 install:FALSE
 
-package: RSQLite 
+package: RSQLite
 rating: 7
 tags:data,database
 comment: SQLite is good SQL database engine with out configuration and service.
 Never try, but worth trying.
 
 
-### big-data 
+### big-data
 
-package: bigmemory 
+package: bigmemory
 rating: 7
-tags:data,big-data 
-comment: The family of big data. The whole list - 
+tags:data,big-data
+comment: The family of big data. The whole list -
 bigmemory, biganalytics, bigtabulate, bigalgebra.
 
-package: ff 
+package: ff
 rating: 7
-tags:data,big-data 
+tags:data,big-data
 
-package: biglm 
+package: biglm
 rating: 7
-tags:data,big-data 
+tags:data,big-data
 
-package: data.table 
+package: data.table
 rating: 7
 tags:data,big-data,data.frame
 comment: an extentition of data.frame for big data.
@@ -111,131 +111,135 @@ tags:programing, OOP
 comment:  Prototype object-based programming
 install:FALSE
 
-package: proto 
+package: proto
 rating: 7
 tags:programing, OOP
-comment:  Prototype object-based programming
+comment:  Prototype object-based progra
 
-package: R.oo 
+mming
+
+package: R.oo
 rating: 7
 tags:programing, OOP
 comment:  see also help(ReferenceClasses)
 
-package: foreach 
+package: foreach
 rating: 7
 tags:programing
 comment:  Foreach looping construct for R. Paralel computation.
 
-package: doParallel 
+package: doParallel
 rating: 7
 tags:programing
 comment:  Paralel computation.
 
-package: evaluate 
+package: evaluate
 rating: 7
 tags:programing,strings
 comment:  Parsing and evaluation tools that provide more details than the default
 
-package: compiler 
-rating: 7
-tags:programing
-comment:  R code compilation
+# package: compiler
+# rating: 7
+# tags:programing
+# comment:  R code compilation
 
-package: gtools 
+package: gtools
 rating: 7
 tags:programing
 comment:  Various R programming tools
-	 	
-package: Rcpp 
+
+package: Rcpp
 rating: 7
 tags:programing,CPP
 comment:  Seamless R and C++ Integration
 
-package: inline 
+package: inline
 rating: 7
 tags:programing,CPP
-comment:  unctionality to dynamically define R functions and S4 methods with in-lined C, C++ or Fortran 
+comment:  unctionality to dynamically define R functions and S4 methods with in-lined C, C++ or Fortran
 
-package: httr 
+package: httr
 rating: 7
 tags:programing,internet
 comment:  simpifies the package `RCurl`
 
-package: RCurl 
+package: RCurl
 rating: 7
 tags:programing,internet
 comment:  automates the testing of my code
 
-package: Rmpfr 
+package: Rmpfr
 rating: 5.1
 tags:programing,precision
 comment:  need extra library- sudo apt-get install libmpfr-dev
 
-package: gmp 
+package: gmp
 rating: 5
 tags:programing,precision
 comment:  need extra library- sudo apt-get install libmpfr-dev
 
-package: memoise 
+package: memoise
 rating: 5
 tags:programing,cache
-comment:  
+comment:
 
 
 
 ### developing
- 	
-package: devtools 
+
+package: devtools
 rating: 7
 tags:programing,developing
 comment: Tools to make developing R code easier.
 Worth investigation.
 
-package: formatR 
+package: formatR
 rating: 7
 tags: programing,developing
 comment: format R Code Automatically
 
 
-package: roxygen2 
+package: roxygen2
 rating: 7
 tags:programing,developing
 comment: which allows you to keep documentation next to the function it documents
 
-package: testthat 
+package: testthat
 rating: 7
 tags:programing,developing
 comment:  automates the testing of my code
 
-package: profr 
+package: profr
 rating: 7
 tags:programing,developing,profile
 comment: particularly the unreleased interactive explorer, makes it easy for me to find bottlenecks in my code.
 
-package: rbenchmark 
+package: rbenchmark
 rating: 7
 tags:programing,developing,profile
-comment: 
+comment:
 
-package: microbenchmark 
+package: microbenchmark
 rating: 7
 tags:programing,developing,profile
-comment: 
+comment:
 
 
 #######################
 ##### interactive #####
 #######################
 
-package: Rcmdr 
+package: Rcmdr
 rating: 7
 tags:interactive
 
-package: igraph 
-rating: 7
-tags:interactive
 
-package: playwith 
+package: igraph
+rating: 7
+tags:graph,interactive
+
+
+package: playwith
 rating: 7
 tags:interactive
 
@@ -245,15 +249,15 @@ tags:interactive
 #######################
 # Dar gali praverti koeliu modeliu palyginimu paketas
 
-package: knitr 
+package: knitr
 rating: 7
 tags:output
 
-package: markdown 
+package: markdown
 rating: 7
 tags:output
 
-package: xtable 
+package: xtable
 rating: 7
 tags:output
 
@@ -287,7 +291,7 @@ package: xts # eXtensible Time Series
 rating: 7
 tags:extentions,ts
 
- 
+
 # ###########################
 # ########## Misc ###########
 # ###########################
@@ -298,7 +302,7 @@ tags:misc
 
 package: e1071 # Misc Functions of the Department of Statistics (e1071), TU Wien
 rating: 7
-tags:misc
+tags:misc, learning
 
 package: MASS   # Functions and datasets to support Venables and Ripley, 'Modern Applied Statistics with S' (4th edition, 2002).
 rating: 7
@@ -366,7 +370,7 @@ package: munsell 	# Munsell colour system
 rating: 7
 tags:graph
 
-package: iplots 	
+package: iplots
 rating: 7
 tags:graph,interactive
 
@@ -399,11 +403,18 @@ package: numDeriv   # Numeric derivative
 rating: 7
 tags:calculation,derivatives
 
+package: adagio # methods and algorithms for discrete optimization and (evolutionary) global optimization.
+rating: 5
+tags:calculation,optimisation
 
 
 # ##################################
 # ############ modeling ############
 # ##################################
+
+
+
+
 
 package: sem 		# Structural Equation Models
 rating: 7
@@ -454,119 +465,142 @@ rating: 7
 tags:modeling
 
 
-# ### statistics 
-# 
+# ### datamethods
+#
 # ## ts
 
 package:  zoo		    # S3 Infrastructure for Regular and Irregular Time Series (Z’s ordered observations)
 rating: 7
-tags:statistics,ts
+tags:datamethods,ts
 
 package:  tseries 	# Time series analysis and computational finance
 rating: 7
-tags:statistics,ts
+tags:datamethods,ts
 
 package:  forecast 	# Forecasting functions for time series and linear models
 rating: 7
-tags:statistics,ts
+tags:datamethods,ts
 
 package:  robustbase 	# Basic Robust Statistics
 rating: 7
-tags:statistics,ts
+tags:datamethods,ts
 
 package:  modeltools 	# Tools and Classes for Statistical Models
 rating: 7
-tags:statistics,ts
+tags:datamethods,ts
 
 package:  SparseM 	# Sparse Linear Algebra
 rating: 7
-tags:statistics,ts
+tags:datamethods,ts
 
 package:  survival 	# Survival Analysis
 rating: 7
-tags:statistics,ts
+tags:datamethods,ts
 
 
-# ## regresion 
+# ## regresion
 
 package:  car 	 # Companion to Applied Regression
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
 package: lmtest 		# Testing Linear Regression Models
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
 package: sandwich 	# Robust Covariance Matrix Estimators
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
 package: leaps 		# regression subset selection
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
 package: nlme 		# Linear and Nonlinear Mixed Effects Models
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
 package: lme4 		# Linear mixed-effects models using S4 classes
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
 package: effects 	# Effect  for Linear, Generalized Linear, Multinomial-Logit, Proportional-Odds Logit Models and Mixed-Effects Models
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
 package: quantreg 	# Quantile Regression
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
 package: strucchange 	# Testing, Monitoring, and Dating Structural Changes
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
 package: relimp 		# Relative Contribution of Effects in a Regression Model
 rating: 7
-tags:statistics,regresion
+tags:datamethods,regresion
 
-# ### learning 
+# ### learning
+
+package: Metrics 		# Evaluation metrics for machine learning
+rating: 7
+tags:modeling,learning
+
+package: dtw 		# Dynamic time warping algorithms (laiko eilucio sugretinimas)
+rating: 7
+tags:modeling,learning
+
 
 package: randomForest 	# Breiman and Cutler’s random forests for classification and regression
 rating: 7
-tags:statistics,learning
+tags:datamethods,learning
+
+package: FNN 		# Fast Nearest Neighbor Search Algorithms
+rating: 7
+tags:datamethods,learning
+
 
 package: nnet 		# Feed-forward Neural Networks and Multinomial Log-Linear Models
 rating: 7
-tags:statistics,learning
+tags:datamethods,learning
 
+
+
+package: neuralnet 		# Neural Networks
+rating: 7
+tags:datamethods,learning
+
+package: RSNNS 		# 
+rating: 7
+tags:datamethods,learning
+install:FALSE
 
 package: kernlab 	# Kernel-based Machine Learning Lab
 rating: 7
-tags:statistics,learning
+tags:datamethods,learning
 
 package: tree 		# Classification and regression trees
 rating: 7
-tags:statistics,learning
+tags:datamethods,learning
 
 package: rpart 		# Recursive Partitioning
 rating: 7
-tags:statistics,learning
+tags:datamethods,learning
 
 package: cluster		# : a must. It provides basic clustering techniques as k-means, PAM, CLARA and silhouette representations, among others.
 rating: 7
-tags:statistics,learning
+tags:datamethods,learning
 
 
-# it isn’t really just a package but a whole set of data-mining techniques. 
-# It provides its own implementation of other techniques as kmeans and so 
-# but I found very useful its PCA methods for factorial analysis.
+package: rattle 		# 
+rating: 5
+tags:datamethods,learning,interactive
 
-package:FactoMineR	
+
+package:FactoMineR
 rating: 7
-tags:statistics,learning
+tags:datamethods,learning
 
-#########################################################################3
-# rgl
-# nlme
+
 
 
