@@ -112,3 +112,4 @@ sympy-plots-for-*.tex/
 #misc
 *.tex.bak
 
+.Rproj.user

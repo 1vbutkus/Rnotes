@@ -171,10 +171,11 @@ http://adv-r.had.co.nz/
   combinations()	#from gtools
   permutations()	#from gtools
 
-### Vector, matrix
+### Vector, matrix, array
   # manipulation
   subset()
   with();within()
+  t(); aperm();
 
   # Ordering
   order()
